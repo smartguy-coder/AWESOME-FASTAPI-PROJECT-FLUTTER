@@ -1,0 +1,5 @@
+site_name: Flutter project
+nav:
+  - Guide: index.md
+  - Structure: structure.md
+  - Used Ports: used_ports.md
