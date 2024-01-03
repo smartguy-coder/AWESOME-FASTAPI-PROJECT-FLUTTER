@@ -17,103 +17,81 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var error;
+  bool isUpdateFirstTime = true;
+  bool updateImmediately = false;
+  
+  Future<void> changeUpdateImmediately() async {
+    setState(() {
+      updateImmediately = true;
+    });
+  }
+  Stream<List> alwaysFetchStories() async* {
+    final modalRoute = ModalRoute.of(context);
+    while (db.getCurrentPageIndex() == 0 && modalRoute!= null && modalRoute.isActive == true) {
+      if (!updateImmediately && !isUpdateFirstTime) {
+        await Future.delayed(Duration(seconds: 30));
+      }
+
+      updateImmediately = false;
+      isUpdateFirstTime = false;
+      if (db.getCurrentPageIndex() == 0 && modalRoute!= null && modalRoute.isActive == true){
+      print('update0');
+      yield await fetchStories();
+      } else {
+      }
+      
+    } 
+  }
+
   
 
-  var error;
   @override
   Widget build(BuildContext context) {
-    
-    return FutureBuilder(
-        future: fetchStories(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && !snapshot.hasError) {
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text('Stories'),
-                ),
-                body: Center(
-                  child: ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return Story(
-                        author: snapshot.data[index]['author'],
-                        text: snapshot.data[index]['text'],
-                        title: snapshot.data[index]['title'],
-                        tagsList: snapshot.data[index]['tags'],
-                      );
+    return RefreshIndicator(
+        onRefresh: changeUpdateImmediately,
+        child: StreamBuilder(
+            stream: alwaysFetchStories(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.data != null && !snapshot.hasError) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Stories'),
+                  ),
+                  body: Center(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Story(
+                          author: snapshot.data[index]['author'],
+                          text: snapshot.data[index]['text'],
+                          title: snapshot.data[index]['title'],
+                          tagsList: snapshot.data[index]['tags'],
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Stories'),
+                  ),
+                  body: MyAlertPage(
+                    functionWhenLoad: () {},
+                    needInFutureBuilder: true,
+                    text: snapshot.hasError
+                        ? '${snapshot.error}'
+                        : 'Entire error!',
+                    // needInButton: true,
+                    // buttonText: 'Create new story',
+                    onButtonPress: () async {
+                      db.putData(currentPageIndex: 1);
+                      widget.changeStatePageRouter();
                     },
                   ),
-                ),
-              );
-          } else {
-          
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Stories'),
-              ),
-              body: MyAlertPage(
-                functionWhenLoad: () {},
-                needInFutureBuilder: true,
-                text: snapshot.hasError ? '${snapshot.error}' : 'Entire error!',
-                // needInButton: true,
-                // buttonText: 'Create new story',
-                onButtonPress: () async {
-                  db.putData(currentPageIndex: 1);
-                    widget.changeStatePageRouter();
-                },
-              ),
-            );
-          }
-        });
-
-    // return widget.isFetchStoriesWorking.then((bool) {
-    //   if (bool) {
-    //     return Scaffold(
-    //       appBar: AppBar(
-    //         title: Text('Stories'),
-    //       ),
-    //       body: Center(
-    //         child: ListView.builder(
-    //           itemCount: listStories.length,
-    //           itemBuilder: (context, index) {
-    //             return Story(
-    //               author: listStories[index]['author'],
-    //               text: listStories[index]['text'],
-    //               title: listStories[index]['title'],
-    //               tagsList: listStories[index]['tags'],
-    //             );
-    //           },
-    //         ),
-    //       ),
-    //     );
-    //   }
-    // }).catchError((error) {});
-    // ? Scaffold(
-    //     appBar: AppBar(
-    //       title: Text('Stories'),
-    //     ),
-    //     body: Center(
-    //       child: ListView.builder(
-    //         itemCount: listStories.length,
-    //         itemBuilder: (context, index) {
-    //           return Story(
-    //             author: listStories[index]['author'],
-    //             text: listStories[index]['text'],
-    //             title: listStories[index]['title'],
-    //             tagsList: listStories[index]['tags'],
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   )
-    // : Scaffold(
-    //     appBar: AppBar(
-    //       title: Text('Stories'),
-    //     ),
-    //     body: MyAlertPage(
-    //       text: 'Failed to load stories!',
-    //       onButtonPress: () {},
-    //     ),
-    //   );
+                );
+              }
+            }));
   }
 }

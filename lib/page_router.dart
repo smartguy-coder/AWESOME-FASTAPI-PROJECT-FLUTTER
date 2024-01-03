@@ -25,7 +25,8 @@ class _PageRouterState extends State<PageRouter> {
     Future<bool> checkIsPostStoriesWorking() async {
     
     try {
-      return isTimeExpired(db.getRefreshTokenExpireDateTime());
+      isTimeExpired(db.getRefreshTokenExpireDateTime());
+      return true;
     } catch (error) {
       if ('$error' == 'No refresh token') {
         return false;
@@ -70,7 +71,7 @@ class _PageRouterState extends State<PageRouter> {
         // checkIsRefreshTokenExpired: checkIsRefreshTokenExpired,
       ), // 1
       SettingsPage(
-
+        checkIsRefreshTokenExpired :checkIsPostStoriesWorking,
         changeStateMain: widget.changeStateMain,
         // checkIsRefreshTokenExpired: checkIsRefreshTokenExpired,
       ), // 2
@@ -82,8 +83,9 @@ class _PageRouterState extends State<PageRouter> {
   ) {
     setState(
       () {
-        checkIsFetchStoriesWorking;
+        db.putData(currentPageIndex: index);
         _currentPageIndex = index;
+        
       },
     );
   }

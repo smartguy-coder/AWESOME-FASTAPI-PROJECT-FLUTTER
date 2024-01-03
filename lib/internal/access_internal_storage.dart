@@ -68,7 +68,9 @@ class InternalDatabase {
   }
 
   void putRefreshTokenExpireDateTime(
-      {required DateTime refreshTokenExpireDateTime}) {
+      {var refreshTokenExpireDateTime}) {
+        if (!(refreshTokenExpireDateTime is DateTime))
+        {refreshTokenExpireDateTime = DateTime.now().toUtc();}
         print('putting data');
     box.put('refreshTokenExpireDateTime',
         jsonEncode(dateTimeToMap(dateTime: refreshTokenExpireDateTime)));

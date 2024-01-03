@@ -37,14 +37,48 @@ class _CreateStoriesPageState extends State<CreateStoriesPage> {
   final _tags_controller = TextEditingController();
   String text = '';
   var tags;
+  bool isUpdateFirstTime = true;
+  bool updateImmediately = false;
+  
+  Future<void> changeUpdateImmediately() async {
+    setState(() {
+      updateImmediately = true;
+    });
+  }
+Stream<bool> alwaysCheckPostStories() async* {
+  final modalRoute = ModalRoute.of(context);
+    while (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive == true) {
+      if (!updateImmediately && !isUpdateFirstTime) {
+        await Future.delayed(Duration(seconds: 5));
+      }
+         
+         
+         
+         isUpdateFirstTime = false;
+        updateImmediately = false;
+            print('update1');
+if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive == true){
+      print('update1');
+      yield await widget.checkIsPostStoriesWorking() ? true : false;
+      } else {
+      }
+
+      
+      
+    }
+  }
+
+
+
   @override
   Widget build(
     BuildContext context,
   ) {
-    return FutureBuilder(
-        future: widget.checkIsPostStoriesWorking(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+    return StreamBuilder(
+      
+      stream: alwaysCheckPostStories(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState != ConnectionState.waiting) {
             return !snapshot.hasError && snapshot.data == true
                 ? Scaffold(
                     appBar: AppBar(
