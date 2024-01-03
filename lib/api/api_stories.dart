@@ -25,7 +25,6 @@ Future<List> fetchStories() async {
     final info = response.body;
     if (status == 200 || status == 201) {
       var list = jsonDecode(info);
-      print(list);
       if (list.length > 0) {
         return list;
       }
@@ -68,7 +67,6 @@ Future<String> postStories({
   } catch (e) {
     textResponse = '$e';
   }
-
   return textResponse != null ? textResponse : 'The story have been sent!';
 }
 

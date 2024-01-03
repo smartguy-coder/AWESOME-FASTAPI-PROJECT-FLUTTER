@@ -9,11 +9,12 @@ class SettingsPage extends StatefulWidget {
 
   final changeStateMain;
 
-  // final checkIsRefreshTokenExpired;
+  final checkIsRefreshTokenExpired;
   SettingsPage({
     super.key,
     // required this.changeState,
     // required this.checkIsRefreshTokenExpired,
+    required this.checkIsRefreshTokenExpired,
     required this.changeStateMain,
 
   });
@@ -61,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Text('Account:'),
                   Spacer(),
-                  MyButton(
+                  checkIsRefreshTokenExpired? MyButton(
                     text: 'Log In/Sing Up',
                     onPressed: () {
                       Navigator.push(
@@ -73,6 +74,19 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                       );
+                    },
+                  ) : MyButton(
+                    text: 'Log out',
+                    onPressed: () {
+                      setState(() {
+                        db.putData(
+                          accessToken: '',
+                          refreshToken: '',
+                          tokenType: '',
+          
+                        );
+                        db.putRefreshTokenExpireDateTime(refreshTokenExpireDateTime: '');
+                      });
                     },
                   ),
                 ],
