@@ -23,15 +23,19 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   InternalDatabase db = InternalDatabase();
-
+  bool isUpdateFirstTime = true;
   Stream<bool> alwaysCheckToken() async* {
     final modalRoute = ModalRoute.of(context);
     while (db.getCurrentPageIndex() == 2 &&
         modalRoute != null &&
         modalRoute.isActive == true) {
-      await Future.delayed(Duration(seconds: 2));
-
+      if (!isUpdateFirstTime){
+        await Future.delayed(Duration(seconds: 3));
+      }
+      await Future.delayed(Duration(milliseconds: 1));
+      isUpdateFirstTime = false;
       if (db.getCurrentPageIndex() == 2 && modalRoute.isActive == true) {
+        
         yield widget.checkIsRefreshTokenExpired();
       } else {}
     }
