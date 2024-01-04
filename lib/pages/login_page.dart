@@ -10,8 +10,10 @@ import '../util/user_forms/password_form.dart';
 InternalDatabase db = InternalDatabase();
 
 class LoginPage extends StatefulWidget {
+  final changeUpdateImmediately;
   LoginPage({
     super.key,
+    this.changeUpdateImmediately,
   });
 
   @override
@@ -63,8 +65,14 @@ class _LoginPageState extends State<LoginPage> {
                             text: [text, value].join(),
                             buttonPressed: value == 'You are logged in!'
                                 ? () async {
-                                    Navigator.of(context)
-                                        .popUntil((route) => route.isFirst);
+                                    setState(() {
+                                      if (widget.changeUpdateImmediately !=
+                                          null) {
+                                        widget.changeUpdateImmediately;
+                                      }
+                                      Navigator.of(context)
+                                          .popUntil((route) => route.isFirst);
+                                    });
                                   }
                                 : null);
 

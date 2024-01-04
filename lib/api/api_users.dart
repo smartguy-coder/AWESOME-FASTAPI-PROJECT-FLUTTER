@@ -71,3 +71,12 @@ Future<String> loginUser({
   }
   return text != null ? text : 'You are logged in!';
 }
+
+Future<void> logoutUser() async {
+  db.putData(
+    accessToken: '',
+    refreshToken: '',
+    tokenType: '',
+  );
+  db.putRefreshTokenExpireDateTime(refreshTokenExpireDateTime: '');
+}
