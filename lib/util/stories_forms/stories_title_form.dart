@@ -35,7 +35,6 @@ class _storiesTitleFormState extends State<storiesTitleForm> {
               color: Color.fromRGBO(98, 98, 98, 1),
             ),
           ),
-          
           labelText: 'Title',
         ),
       ),

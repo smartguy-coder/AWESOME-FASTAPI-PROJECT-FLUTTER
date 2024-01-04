@@ -1,9 +1,11 @@
-bool isTimeExpired(targetTime) { 
-  try 
-  {if (targetTime is DateTime){
-  DateTime currentTime = DateTime.now();
-  return !currentTime.isAfter(targetTime);}
-  return false;} catch (e) {
+bool isTimeExpired(targetTime) {
+  try {
+    if (targetTime is DateTime) {
+      DateTime currentTime = DateTime.now();
+      return currentTime.isAfter(targetTime);
+    }
+    return false;
+  } catch (e) {
     return false;
   }
 }

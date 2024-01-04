@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class storiesTagsForm extends StatefulWidget {
   final controller;
 
@@ -36,11 +35,9 @@ class _storiesTagsFormState extends State<storiesTagsForm> {
               color: Color.fromRGBO(98, 98, 98, 1),
             ),
           ),
-          
           labelText: 'Tags',
         ),
       ),
     );
-    
   }
 }

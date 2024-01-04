@@ -62,23 +62,17 @@ class Story extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
-
                   Text(
                     tagsList.join(' '),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
                 ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Spacer(),
                 Text(
                   [
                     'created by:',

@@ -41,29 +41,7 @@ Future<void> showDialogBox({
               textAlign: TextAlign.center,
             ),
             MyButton(text: buttonText, onPressed: buttonPressed),
-            // ],
-          ])
-          // content: Container(
-          //   // heightFactor: 0.5,
-          //   // widthFactor: 0.8,
-          //   width: 400,
-          //   height: 400,
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children: [
-          //       ListView(
-          //         children: [
-          //           Text('text',
-          //               style: Theme.of(context).textTheme.bodyMedium,
-          //               textAlign: TextAlign.center),
-          //         ],
-          //       ),
-          //       MyButton(text: text, onPressed: onPressed),
-          //     ],
-          //   ),
-          // ),
-          );
+          ]));
     },
   );
 }

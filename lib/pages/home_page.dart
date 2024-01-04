@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import '../util/story_box.dart';
 import 'my_alert_page.dart';
 
-// List<dynamic> listStories = [];
-// String textError = '';
-
 class HomePage extends StatefulWidget {
   final changeStatePageRouter;
   const HomePage({Key? key, required this.changeStatePageRouter})
@@ -20,31 +17,29 @@ class _HomePageState extends State<HomePage> {
   var error;
   bool isUpdateFirstTime = true;
   bool updateImmediately = false;
-  
+
   Future<void> changeUpdateImmediately() async {
     setState(() {
       updateImmediately = true;
     });
   }
+
   Stream<List> alwaysFetchStories() async* {
     final modalRoute = ModalRoute.of(context);
-    while (db.getCurrentPageIndex() == 0 && modalRoute!= null && modalRoute.isActive == true) {
+    while (db.getCurrentPageIndex() == 0 &&
+        modalRoute != null &&
+        modalRoute.isActive == true) {
       if (!updateImmediately && !isUpdateFirstTime) {
-        await Future.delayed(Duration(seconds: 30));
+        await Future.delayed(Duration(seconds: 3));
       }
 
       updateImmediately = false;
       isUpdateFirstTime = false;
-      if (db.getCurrentPageIndex() == 0 && modalRoute!= null && modalRoute.isActive == true){
-      print('update0');
-      yield await fetchStories();
-      } else {
-      }
-      
-    } 
+      if (db.getCurrentPageIndex() == 0 && modalRoute.isActive == true) {
+        yield await fetchStories();
+      } else {}
+    }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +78,6 @@ class _HomePageState extends State<HomePage> {
                     text: snapshot.hasError
                         ? '${snapshot.error}'
                         : 'Entire error!',
-                    // needInButton: true,
-                    // buttonText: 'Create new story',
                     onButtonPress: () async {
                       db.putData(currentPageIndex: 1);
                       widget.changeStatePageRouter();

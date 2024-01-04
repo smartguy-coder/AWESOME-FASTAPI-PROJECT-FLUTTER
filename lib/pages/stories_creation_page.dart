@@ -1,4 +1,3 @@
-// import 'package:fastapiproject/util/api_stories.dart';
 import 'package:fastapiproject/api/api_stories.dart';
 import 'package:fastapiproject/pages/register_page.dart';
 import 'package:fastapiproject/util/my_button.dart';
@@ -14,16 +13,10 @@ import 'my_alert_page.dart';
 InternalDatabase db = InternalDatabase();
 
 class CreateStoriesPage extends StatefulWidget {
-  // const CreateStoriesPage({super.key});
-
-  final checkIsPostStoriesWorking;
-  // bool isRefreshTokenExpired;
-  // final checkIsRefreshTokenExpired;
+  final bool Function() isPostStoriesWorking;
   CreateStoriesPage({
     super.key,
-    required this.checkIsPostStoriesWorking,
-    // required this.isRefreshTokenExpired,
-    // required this.checkIsRefreshTokenExpired,
+    required this.isPostStoriesWorking,
   });
 
   @override
@@ -37,47 +30,27 @@ class _CreateStoriesPageState extends State<CreateStoriesPage> {
   final _tags_controller = TextEditingController();
   String text = '';
   var tags;
-  bool isUpdateFirstTime = true;
-  bool updateImmediately = false;
-  
-  Future<void> changeUpdateImmediately() async {
-    setState(() {
-      updateImmediately = true;
-    });
-  }
-Stream<bool> alwaysCheckPostStories() async* {
-  final modalRoute = ModalRoute.of(context);
-    while (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive == true) {
-      if (!updateImmediately && !isUpdateFirstTime) {
-        await Future.delayed(Duration(seconds: 5));
-      }
-         
-         
-         
-         isUpdateFirstTime = false;
-        updateImmediately = false;
-            print('update1');
-if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive == true){
-      print('update1');
-      yield await widget.checkIsPostStoriesWorking() ? true : false;
-      } else {
-      }
 
-      
-      
+  Stream<bool> alwaysCheckPostStories() async* {
+    final modalRoute = ModalRoute.of(context);
+    while (db.getCurrentPageIndex() == 1 &&
+        modalRoute != null &&
+        modalRoute.isActive == true) {
+      await Future.delayed(Duration(seconds: 2));
+
+      if (db.getCurrentPageIndex() == 1 && modalRoute.isActive == true) {
+        yield !widget.isPostStoriesWorking();
+      } else {}
     }
   }
-
-
 
   @override
   Widget build(
     BuildContext context,
   ) {
     return StreamBuilder(
-      
-      stream: alwaysCheckPostStories(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        stream: alwaysCheckPostStories(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState != ConnectionState.waiting) {
             return !snapshot.hasError && snapshot.data == true
                 ? Scaffold(
@@ -97,7 +70,6 @@ if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive =
                             storiesTitleForm(controller: _title_controller),
                             storiesTextForm(controller: _text_controller),
                             storiesTagsForm(controller: _tags_controller),
-                            // storiesAuthorForm(controller: _author_controller),
                             MyButton(
                               text: 'Add',
                               onPressed: () async {
@@ -111,10 +83,7 @@ if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive =
                                 }
                                 if (numberOfButtonPress == 0) {
                                   if (_title_controller.text.length == 0 ||
-                                      _text_controller.text.length ==
-                                          0) // Tags are not needed!
-
-                                  {
+                                      _text_controller.text.length == 0) {
                                     text =
                                         "You fogot to write some data!\nSo error occurred:\n\n";
                                   }
@@ -139,29 +108,7 @@ if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive =
                                     _tags_controller.text = '';
                                     numberOfButtonPress = 0;
                                   }
-
-                                  // numberOfButtonPress++;
-                                  // await showDialogBox(
-                                  //   context: context,
-                                  //   text: );await postStories(
-                                  //     text: _text_controller.text,
-                                  //     title: _title_controller.text,
-                                  //     tags: tags,
-                                  //   ).then((value){}).whenComplete(
-                                  //     () async {
-                                  //       // _title_controller.text = '';
-                                  //       // _text_controller.text = '';
-                                  //       // _tags_controller.text = '';
-                                  //       // numberOfButtonPress = 0;
-                                  //     },
-                                  //   ),
-                                  //
                                 }
-
-                                // _title_controller.text = '';
-                                // _text_controller.text = '';
-                                // _tags_controller.text = '';
-                                // _author_controller.text = '';
                               },
                             )
                           ],
@@ -183,9 +130,7 @@ if (db.getCurrentPageIndex() == 1  && modalRoute!= null && modalRoute.isActive =
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterPage(
-                                // checkIsRefreshTokenExpired:widget.checkIsRefreshTokenExpired,
-                                ),
+                            builder: (context) => RegisterPage(),
                           ),
                         );
                       },

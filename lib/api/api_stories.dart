@@ -5,17 +5,14 @@ import 'package:http/http.dart' as http;
 
 import '../internal/access_internal_storage.dart';
 
-// String httpAdress = 'https://awesome-project-edu.online';
-String httpAdress = 'https://0602-5-133-47-43.ngrok-free.app';
+String httpAdress = 'https://awesome-project-edu.online';
 InternalDatabase db = InternalDatabase();
 
 Future<List> fetchStories() async {
-  // Using Function: try to get list of stories however check for ErrorDescription and show them using Navigator.push if needed
   try {
     int limit = 50;
     int skip = 0;
-    // Construct the query parameters
-    // https://awesome-project-edu.online/api/stories?limit=10&skip=0
+
     var uri = Uri.parse('$httpAdress/api/stories?limit=$limit&skip=$skip#skip');
 
     final response = await http.get(
@@ -39,8 +36,6 @@ Future<List> fetchStories() async {
 }
 
 Future<String> postStories({
-  // Using Function: try to get string however check for ErrorDescription and show them using Navigator.push if needed
-
   required String text,
   required String title,
   List tags = const [],
@@ -53,25 +48,21 @@ Future<String> postStories({
     status == 201
         ? null
         : await () async {
-            // if first time with old tokens it did not work we refresh tokens
             await refreshTokens();
             var responseMap =
                 await sendStories(text: text, title: title, tags: tags);
             status = responseMap['status'];
             info = responseMap['info'];
-            status == 201
-                ? null
-                : throw ErrorDescription(
-                    '$info'); // if second time with new tokens it did not work we throw ErrorDescription
+            status == 201 ? null : throw ErrorDescription('$info');
           };
   } catch (e) {
     textResponse = '$e';
   }
+
   return textResponse != null ? textResponse : 'The story have been sent!';
 }
 
 Future<Map> sendStories({
-  // part of postStories function
   required String text,
   required String title,
   List tags = const [],
@@ -97,7 +88,6 @@ Future<Map> sendStories({
 }
 
 Future<void> refreshTokens() async {
-  // part of postStories function
   String refreshToken = db.getRefreshToken();
   final headers = {
     'accept': 'application/json',
