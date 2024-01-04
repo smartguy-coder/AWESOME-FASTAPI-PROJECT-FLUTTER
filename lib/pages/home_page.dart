@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         modalRoute != null &&
         modalRoute.isActive == true) {
       if (!updateImmediately && !isUpdateFirstTime) {
-        await Future.delayed(Duration(seconds: 3));
+        await Future.delayed(Duration(seconds: 30));
       }
 
       updateImmediately = false;

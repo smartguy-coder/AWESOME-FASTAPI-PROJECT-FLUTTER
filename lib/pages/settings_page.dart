@@ -1,5 +1,7 @@
+import 'package:fastapiproject/api/api_users.dart';
 import 'package:fastapiproject/pages/my_alert_page.dart';
 import 'package:fastapiproject/pages/register_page.dart';
+import 'package:fastapiproject/util/myDialogBox.dart';
 import 'package:fastapiproject/util/my_button.dart';
 import 'package:flutter/material.dart';
 
@@ -23,14 +25,25 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   InternalDatabase db = InternalDatabase();
+  bool isUpdateFirstTime = true;
+  bool updateImmediately = false;
+  Future<void> changeUpdateImmediately() async {
+    setState(() {
+      updateImmediately = true;
+    });
+  }
 
   Stream<bool> alwaysCheckToken() async* {
     final modalRoute = ModalRoute.of(context);
     while (db.getCurrentPageIndex() == 2 &&
         modalRoute != null &&
         modalRoute.isActive == true) {
-      await Future.delayed(Duration(seconds: 2));
-
+      if (!isUpdateFirstTime && !updateImmediately) {
+        await Future.delayed(Duration(seconds: 3));
+      }
+      await Future.delayed(Duration(milliseconds: 1));
+      isUpdateFirstTime = false;
+      updateImmediately = false;
       if (db.getCurrentPageIndex() == 2 && modalRoute.isActive == true) {
         yield widget.checkIsRefreshTokenExpired();
       } else {}
@@ -84,23 +97,28 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => RegisterPage(),
+                                        builder: (context) => RegisterPage(
+                                            changeUpdateImmediately:
+                                                changeUpdateImmediately),
                                       ),
                                     );
                                   },
                                 )
                               : MyButton(
                                   text: 'Log out',
-                                  onPressed: () {
-                                    setState(() {
-                                      db.putData(
-                                        accessToken: '',
-                                        refreshToken: '',
-                                        tokenType: '',
-                                      );
-                                      db.putRefreshTokenExpireDateTime(
-                                          refreshTokenExpireDateTime: '');
-                                    });
+                                  onPressed: () async {
+                                    showDialogBox(
+                                        context: context,
+                                        text: 'You are logged out!',
+                                        buttonPressed: () => setState(() {
+                                              logoutUser();
+
+                                              changeUpdateImmediately()
+                                                  .then((value) {
+                                                Navigator.of(context).popUntil(
+                                                    (route) => route.isFirst);
+                                              });
+                                            }));
                                   },
                                 ),
                         ],

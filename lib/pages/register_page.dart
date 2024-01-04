@@ -9,8 +9,10 @@ import '../util/user_forms/password_form.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
+  final changeUpdateImmediately;
   RegisterPage({
     super.key,
+    this.changeUpdateImmediately,
   });
 
   @override
@@ -85,7 +87,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => LoginPage(
+                        changeUpdateImmediately: widget.changeUpdateImmediately,
+                      ),
                     ),
                   );
                 },

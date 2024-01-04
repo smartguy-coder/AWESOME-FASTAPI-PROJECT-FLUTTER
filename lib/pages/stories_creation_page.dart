@@ -30,13 +30,17 @@ class _CreateStoriesPageState extends State<CreateStoriesPage> {
   final _tags_controller = TextEditingController();
   String text = '';
   var tags;
-
+  bool isUpdateFirstTime = true;
   Stream<bool> alwaysCheckPostStories() async* {
     final modalRoute = ModalRoute.of(context);
     while (db.getCurrentPageIndex() == 1 &&
         modalRoute != null &&
         modalRoute.isActive == true) {
-      await Future.delayed(Duration(seconds: 2));
+      if (!isUpdateFirstTime) {
+        await Future.delayed(Duration(seconds: 3));
+      }
+      await Future.delayed(Duration(milliseconds: 1));
+      isUpdateFirstTime = false;
 
       if (db.getCurrentPageIndex() == 1 && modalRoute.isActive == true) {
         yield !widget.isPostStoriesWorking();
