@@ -15,13 +15,16 @@ Future<String> createUser({
   required String name,
 }) async {
   var text;
-  final headers = {
-    'accept': 'application/json',
-    'Content-Type': 'application/json',
-  };
-  Map data = {"email": email, "password": password, "name": name};
-  final url = Uri.parse('$httpAdress/api/users/create?');
   try {
+    if (email.length < 3 || password.length < 8 || name.length < 2) {
+      throw ErrorDescription('Not all date have been written!');
+    }
+    final headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+    Map data = {"email": email, "password": password, "name": name};
+    final url = Uri.parse('$httpAdress/api/users/create?');
     final response =
         await http.post(url, headers: headers, body: jsonEncode(data));
     final status = response.statusCode;
@@ -42,6 +45,9 @@ Future<String> loginUser({
 }) async {
   var text;
   try {
+    if (email.length < 3 || password.length < 8) {
+      throw ErrorDescription('Not all date have been written!');
+    }
     final headers = {
       'accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
