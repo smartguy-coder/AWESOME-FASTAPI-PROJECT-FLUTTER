@@ -1,4 +1,3 @@
-// import 'package:fastapiproject/util/api_stories.dart';
 import 'package:fastapiproject/api/api_users.dart';
 import 'package:fastapiproject/util/my_button.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final _password_controller = TextEditingController();
   int numberOfButtonPress = 0;
   String text = '';
-  // void updateIsRefreshTokenExpired() {
-  //   setState(() {
-  //         checkIsRefreshTokenExpired();
-  //   });
+
   @override
   Widget build(
     BuildContext context,
@@ -69,7 +65,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ? () async {
                                     Navigator.of(context)
                                         .popUntil((route) => route.isFirst);
-
                                   }
                                 : null);
 

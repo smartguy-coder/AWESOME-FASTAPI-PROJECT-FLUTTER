@@ -32,7 +32,6 @@ class InternalDatabase {
     );
   }
 
-// fist time ever opening
   void createInitialData() {
     box.put('themeMode', 'ThemeMode.dark');
     box.put('accessToken', '');
@@ -45,7 +44,7 @@ class InternalDatabase {
   void putData({
     String accessToken = '',
     String refreshToken = '',
-    themeMode, // Type ThemeMode required
+    themeMode,
     String tokenType = '',
     int currentPageIndex = -1,
   }) {
@@ -53,7 +52,6 @@ class InternalDatabase {
       box.put('themeMode', '$themeMode');
     }
     if (accessToken.length > 0) {
-
       box.put('accessToken', accessToken);
     }
     if (refreshToken.length > 0) {
@@ -67,11 +65,11 @@ class InternalDatabase {
     }
   }
 
-  void putRefreshTokenExpireDateTime(
-      {var refreshTokenExpireDateTime}) {
-        if (!(refreshTokenExpireDateTime is DateTime))
-        {refreshTokenExpireDateTime = DateTime.now().toUtc();}
-        print('putting data');
+  void putRefreshTokenExpireDateTime({var refreshTokenExpireDateTime}) {
+    if (!(refreshTokenExpireDateTime is DateTime)) {
+      refreshTokenExpireDateTime = DateTime.now().toUtc();
+    }
+
     box.put('refreshTokenExpireDateTime',
         jsonEncode(dateTimeToMap(dateTime: refreshTokenExpireDateTime)));
   }
@@ -102,25 +100,16 @@ class InternalDatabase {
     String refreshTokenExpireDateTime_map_json =
         box.get('refreshTokenExpireDateTime');
     if (refreshTokenExpireDateTime_map_json.length > 0) {
-    Map refreshTokenExpireDateTime_map = jsonDecode(refreshTokenExpireDateTime_map_json);
-    DateTime refreshTokenExpireDateTime =
-        mapToDateTime(map: refreshTokenExpireDateTime_map);
-    return refreshTokenExpireDateTime;}
+      Map refreshTokenExpireDateTime_map =
+          jsonDecode(refreshTokenExpireDateTime_map_json);
+      DateTime refreshTokenExpireDateTime =
+          mapToDateTime(map: refreshTokenExpireDateTime_map);
+      return refreshTokenExpireDateTime;
+    }
     throw ErrorDescription('No refresh token');
   }
 
   String exceptionToString({required String error}) {
     return '$error'.replaceAll('ErrorDescription:', '');
   }
-
-  // void _toggleTheme() {
-  //   setState(
-  //     () {
-  //       _currentThemeMode = _currentThemeMode == ThemeMode.light
-  //           ? ThemeMode.dark
-  //           : ThemeMode.light;
-  //       db.putData(themeMode: _currentThemeMode);
-  //     },
-  //   );
-  // }
 }

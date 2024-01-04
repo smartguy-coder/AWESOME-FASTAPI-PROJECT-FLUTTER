@@ -1,4 +1,3 @@
-// import 'package:fastapiproject/util/api_stories.dart';
 import 'package:fastapiproject/util/my_button.dart';
 import 'package:flutter/material.dart';
 
@@ -10,14 +9,8 @@ import '../util/user_forms/password_form.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  // const CreateStoriesPage({super.key});
-
-  // final updateIsRefreshTokenExpired;
   RegisterPage({
     super.key,
-
-    // required this.updateIsRefreshTokenExpired,
-    // required this.alreadyRegistered,
   });
 
   @override
@@ -83,16 +76,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         _password_controller.text = '';
                         numberOfButtonPress = 0;
                       }
-
-                      // await createUser(
-                      //     name: _name_controller.text,
-                      //     email: _email_controller.text,
-                      //     password: _password_controller.text);
-                      // _name_controller.text = '';
-                      // _email_controller.text = '';
-                      // _password_controller.text = '';
-                      // numberOfButtonPress = 0;
-                      // await showDialogBox(context: context, text: text);
                     }
                     ;
                   }),
@@ -102,10 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(
-                        // updateIsRefreshTokenExpired:widget.updateIsRefreshTokenExpired,
-
-                      ),
+                      builder: (context) => LoginPage(),
                     ),
                   );
                 },

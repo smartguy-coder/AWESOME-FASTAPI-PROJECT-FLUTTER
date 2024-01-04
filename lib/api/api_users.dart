@@ -10,7 +10,6 @@ import 'api_stories.dart';
 InternalDatabase db = InternalDatabase();
 
 Future<String> createUser({
-  // Using Function: try to get string however check for ErrorDescription and show them using Navigator.push if needed
   required String email,
   required String password,
   required String name,
@@ -38,13 +37,11 @@ Future<String> createUser({
 }
 
 Future<String> loginUser({
-  // Using Function: try to get string however check for ErrorDescription and show them using Navigator.push if needed
   required String email,
   required String password,
 }) async {
   var text;
   try {
-    
     final headers = {
       'accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -73,15 +70,4 @@ Future<String> loginUser({
     text = '$e';
   }
   return text != null ? text : 'You are logged in!';
-}
-
-void performLogin(
-    {required context,
-    required email_controller,
-    required password_controller}) async {
-  String loginResult =
-      await loginUser(email: email_controller, password: password_controller);
-
-  // Handle login error or other messages
-  print('Login failed: $loginResult');
 }

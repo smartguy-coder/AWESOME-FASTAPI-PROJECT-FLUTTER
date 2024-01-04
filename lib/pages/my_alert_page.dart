@@ -13,19 +13,13 @@ class MyAlertPage extends StatefulWidget {
   final needInFutureBuilder;
 
   MyAlertPage({
-    // Text
     this.text, // not required if isFromLogin or isFromRegister is true
 
-    // Button
     this.buttonText = 'OK',
     this.needInButton = false,
     required this.onButtonPress,
-
-    // Extra
     required this.functionWhenLoad,
     required this.needInFutureBuilder,
-
-    // Title
     this.needInAppTitle = false,
     this.titleText = '',
   });
@@ -40,7 +34,6 @@ class _MyAlertPageState extends State<MyAlertPage> {
       appBar: widget.needInAppTitle
           ? AppBar(
               title: Text('Your Title'),
-              // Other AppBar properties like actions, leading, etc.
             )
           : null,
       body: Center(

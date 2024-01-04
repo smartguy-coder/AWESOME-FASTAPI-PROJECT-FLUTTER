@@ -1,4 +1,3 @@
-// Stories page
 import 'package:fastapiproject/pages/home_page.dart';
 import 'package:fastapiproject/pages/settings_page.dart';
 import 'package:fastapiproject/pages/stories_creation_page.dart';
@@ -12,7 +11,6 @@ int _currentPageIndex = 0;
 InternalDatabase db = InternalDatabase();
 
 class PageRouter extends StatefulWidget {
-  // final Future<VoidCallback>  changeState;
   final changeStateMain;
 
   PageRouter({Key? key, required this.changeStateMain}) : super(key: key);
@@ -22,27 +20,25 @@ class PageRouter extends StatefulWidget {
 }
 
 class _PageRouterState extends State<PageRouter> {
-    Future<bool> checkIsPostStoriesWorking() async {
-    
+  bool checkIsRefreshTokenExpired() {
     try {
-      isTimeExpired(db.getRefreshTokenExpireDateTime());
-      return true;
+      return isTimeExpired(db.getRefreshTokenExpireDateTime());
     } catch (error) {
       if ('$error' == 'No refresh token') {
-        return false;
-      } else 
-      throw ErrorDescription('$error');
-      
+        return true;
+      } else
+        throw ErrorDescription('$error');
     }
   }
 
-
-
-
-    Future<bool> checkIsFetchStoriesWorking() async {
+  bool checkIsFetchStoriesWorking() {
     try {
-      List stories = await fetchStories();
-      if (stories.isNotEmpty) {
+      var stories;
+
+      fetchStories().then((value) {
+        stories = value;
+      });
+      if (stories.length > 0) {
         return true;
       }
       throw ErrorDescription('Failed to load stories');
@@ -50,34 +46,32 @@ class _PageRouterState extends State<PageRouter> {
       throw ErrorDescription('$e');
     }
   }
- 
+
   late final List<Widget> pages;
   void changeStatePageRouter() {
     setState(() {
       _currentPageIndex = db.getCurrentPageIndex();
     });
   }
-  
+
   @override
   void initState() {
     pages = [
       HomePage(
         changeStatePageRouter: changeStatePageRouter,
-      ), // 0
+      ),
       CreateStoriesPage(
-        checkIsPostStoriesWorking :checkIsPostStoriesWorking,
-        // isRefreshTokenExpired: isRefreshTokenExpired,
-
-        // checkIsRefreshTokenExpired: checkIsRefreshTokenExpired,
-      ), // 1
+        isPostStoriesWorking: checkIsRefreshTokenExpired,
+      ),
       SettingsPage(
-        checkIsRefreshTokenExpired :checkIsPostStoriesWorking,
+        checkIsRefreshTokenExpired: checkIsRefreshTokenExpired,
+        changeStatePageRouter: changeStatePageRouter,
         changeStateMain: widget.changeStateMain,
-        // checkIsRefreshTokenExpired: checkIsRefreshTokenExpired,
-      ), // 2
+      ),
     ];
     super.initState();
   }
+
   void _onBottomNavBarItemTapped(
     int index,
   ) {
@@ -85,10 +79,10 @@ class _PageRouterState extends State<PageRouter> {
       () {
         db.putData(currentPageIndex: index);
         _currentPageIndex = index;
-        
       },
     );
   }
+
   @override
   Widget build(
     BuildContext context,
@@ -124,7 +118,3 @@ class _PageRouterState extends State<PageRouter> {
     );
   }
 }
-// Navigator.push(
-// context,
-// MaterialPageRoute(builder: (context) => ScreenB()),
-// );

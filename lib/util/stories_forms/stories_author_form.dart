@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class storiesAuthorForm extends StatefulWidget {
   final controller;
 
@@ -17,7 +16,6 @@ class _storiesAuthorFormState extends State<storiesAuthorForm> {
   @override
   Widget build(BuildContext context) {
     return Card(
-
       child: TextFormField(
         controller: widget.controller,
         decoration: const InputDecoration(
@@ -37,11 +35,9 @@ class _storiesAuthorFormState extends State<storiesAuthorForm> {
               color: Color.fromRGBO(98, 98, 98, 1),
             ),
           ),
-          
           labelText: 'Author',
         ),
       ),
     );
-    
   }
 }
